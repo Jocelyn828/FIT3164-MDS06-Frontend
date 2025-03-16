@@ -1,47 +1,32 @@
 <script setup>
-import HelloWorld from './components/HelloWorld.vue'
-import TheWelcome from './components/TheWelcome.vue'
+  import { ref } from "vue";
+
+  const searchQuery = ref("");
+
+  const performSearch = () => {
+    console.log("Searching for:", searchQuery.value);
+  };
 </script>
 
 <template>
-  <header>
-    <img alt="Vue logo" class="logo" src="./assets/logo.svg" width="125" height="125" />
-
-    <div class="wrapper">
-      <HelloWorld msg="You did it!" />
-    </div>
-  </header>
-
-  <main>
-    <TheWelcome />
-  </main>
+  <div class="container">
+    <h1>Get perfect articles in seconds.</h1>
+  </div>
+  <div class="flex gap-2">
+    <InputText v-model="searchQuery" placeholder="Search..." />
+    <Button label="Search" icon="pi pi-search" @click="performSearch" />
+  </div>
 </template>
 
 <style scoped>
-header {
-  line-height: 1.5;
-}
-
-.logo {
-  display: block;
-  margin: 0 auto 2rem;
-}
-
-@media (min-width: 1024px) {
-  header {
+  .container{
     display: flex;
-    place-items: center;
-    padding-right: calc(var(--section-gap) / 2);
+    align-items: center;
+    justify-content: center;
+    min-height: 100vh;
   }
-
-  .logo {
-    margin: 0 2rem 0 0;
+  .p-inputtext {
+  width: 100%;
+  max-width: 300px;
   }
-
-  header .wrapper {
-    display: flex;
-    place-items: flex-start;
-    flex-wrap: wrap;
-  }
-}
 </style>
