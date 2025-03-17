@@ -9,6 +9,8 @@ import InputText from 'primevue/inputtext';
 import Button from 'primevue/button';
 import Toast from 'primevue/toast';
 import ToastService from 'primevue/toastservice';
+import DataTable from 'primevue/datatable';
+import Column from 'primevue/column';
 import 'primeicons/primeicons.css'
 
 const app = createApp(App)
@@ -30,4 +32,6 @@ app.use(ToastService)
 app.component('Button', Button)
 app.component('InputText', InputText)
 app.component('Toast', Toast)
+app.component('DataTable', DataTable);
+app.component('Column', Column);
 app.mount('#app')
