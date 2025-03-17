@@ -11,9 +11,11 @@ import Toast from 'primevue/toast';
 import ToastService from 'primevue/toastservice';
 import DataTable from 'primevue/datatable';
 import Column from 'primevue/column';
-import 'primeicons/primeicons.css'
+import 'primeicons/primeicons.css';
+import router from "./router";
 
-const app = createApp(App)
+const app = createApp(App);
+
 app.use(PrimeVue, {
     // Default theme configuration
     theme: {
@@ -27,11 +29,14 @@ app.use(PrimeVue, {
             }
         }
     }
- })
-app.use(ToastService)
-app.component('Button', Button)
-app.component('InputText', InputText)
-app.component('Toast', Toast)
+ });
+
+app.use(ToastService);
+app.use(router);
+
+app.component('Button', Button);
+app.component('InputText', InputText);
+app.component('Toast', Toast);
 app.component('DataTable', DataTable);
 app.component('Column', Column);
-app.mount('#app')
+app.mount('#app');

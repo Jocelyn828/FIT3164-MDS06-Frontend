@@ -4,6 +4,11 @@ import ResultsPic from "@/assets/resultspic.svg";
 import DataTable from "primevue/datatable";
 import Column from "primevue/column";
 import { ref } from "vue";
+
+const props = defineProps({
+  query: String, // Accept the search query as a prop
+});
+
 const searchResults = ref([]); // Placeholder for now (no back-end yet)
 </script>
 
@@ -16,24 +21,23 @@ const searchResults = ref([]); // Placeholder for now (no back-end yet)
 
         <!-- Grey Box Content -->
         <div class="results-container">
-
             <!-- Query Section-->
             <div class="results-content">
-            <h2 class="query-title">Your Query:</h2>
-            <p class="query-text">(User Input Query)</p>
-            <h2 class="query-title">Refined Query:</h2>
-            <p class="query-text">(Refined Query)</p>
-            
-            <!-- Table Section -->
-            <DataTable :value="searchResults" class="results-table">
-                <Column field="title" header="Title"></Column>
-                <Column field="author" header="Author"></Column>
-                <Column field="year" header="Year"></Column>
-                <Column field="source" header="Source"></Column>
-                <Column field="num_citations" header="No. of Citations"></Column>
-                <Column field="keywords" header="Keywords"></Column>
-                <Column field="citation" header="Citation"></Column>
-            </DataTable>
+              <h2 class="query-title">Your Query:</h2>
+              <p class="query-text">{{ props.query }}</p>
+              <h2 class="query-title">Refined Query:</h2>
+              <p class="query-text">(Refined Query)</p>
+              
+              <!-- Table Section -->
+              <DataTable :value="searchResults" class="results-table">
+                  <Column field="title" header="Title"></Column>
+                  <Column field="author" header="Author"></Column>
+                  <Column field="year" header="Year"></Column>
+                  <Column field="source" header="Source"></Column>
+                  <Column field="num_citations" header="No. of Citations"></Column>
+                  <Column field="keywords" header="Keywords"></Column>
+                  <Column field="citation" header="Citation"></Column>
+              </DataTable>
             </div>
         </div>
     </div>
@@ -94,7 +98,7 @@ html, body {
 
 .query-text {
   margin: 0 0 15px 0; /* Add margin below each query text */
-  font-size: 16px; 
+  font-size: 18px; 
   color: #555; 
 }
 
