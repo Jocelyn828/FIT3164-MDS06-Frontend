@@ -14,11 +14,11 @@ const searchResults = ref([]); // Placeholder for now (no back-end yet)
 
 <template>
     <div class="results-wrapper">
-        <!-- Image Section -->
-        <div class="results-image-container"> 
-            <Image :src="ResultsPic" alt="Results Image" width=180 />
-        </div>
+        <div class="container-with-floating-image">
 
+          <!-- Floating image aligned top-left of grey box--> 
+           <img :src="ResultsPic" alt="Results Image" class="floating-image" />
+            
         <!-- Grey Box Content -->
         <div class="results-container">
             <!-- Query Section-->
@@ -39,36 +39,33 @@ const searchResults = ref([]); // Placeholder for now (no back-end yet)
                   <Column field="citation" header="Citation"></Column>
               </DataTable>
             </div>
+          </div>
         </div>
-    </div>
+      </div>
 </template>
 
 <style>
-html, body {
-  height: 100%;
-  margin: 0;
-  display: flex;
-  justify-content: center;
-  align-items: center;
-}
-
-/* Wrapper to contain everything */
 .results-wrapper {
   display: flex;
-  flex-direction: column;
-  align-items: flex-start; /* Align children to the left */
-  width: 100%; /* Take full width of the parent */
-  max-width: 1000px; 
-  margin-top: 20px; /* Add space from top */
-  padding: 0 20px; 
+  justify-content: center;
+  width: 100%; 
+  padding: 40px 20px; 
+  box-sizing: border-box;
 }
 
-/* Container for the image */
-.results-image-container {
-  margin-bottom: 0px; /* Space between image and grey box */
-  width: 100%; 
-  display: flex;
-  justify-content: flex-start;
+.container-with-floating-image {
+  position: relative;
+  width: 100%;
+  max-width: 1000px; 
+}
+
+.floating-image {
+  position: absolute;
+  top: -20px;  /* lift image above grey box */
+  left: 0;     
+  z-index: 2;
+  width: 160px;
+  height: auto;
 }
 
 /* Grey box*/
@@ -76,10 +73,14 @@ html, body {
   background-color: #f0f0f0; 
   padding: 30px;
   border-radius: 10px;
-  width: 100%;
-  min-height: 500px;
+  margin-top: 100px;
+  /* width: 100%; */
+  /* max-width: 1000px; */
+  min-height: 300px; 
   /* margin: auto; */
   box-shadow: 0px 4px 6px rgba(0, 0, 0, 0.1);
+  position: relative;
+  z-index: 1;
 }
 
 /* Content inside the box */

@@ -23,7 +23,7 @@ const handleSearch = () => {
 
     <!-- Content Section -->
     <div class="text-container">
-      <h1>Get perfect articles in seconds.</h1>
+      <h1 class="title">Get perfect articles in seconds.</h1>
       <div class="input-container">
         <InputText v-model="searchQuery" type="text" size="large" placeholder="Type a research topic or question..."
           class="input-field" />
@@ -34,21 +34,18 @@ const handleSearch = () => {
 </template>
 
 <style>
-html,
-body {
-  height: 100%;
-  margin: 0;
-  display: flex;
-  justify-content: center;
-  align-items: center;
-}
-
 .container {
   display: flex;
+  flex-direction: row;
   align-items: center;
   justify-content: center;
   gap: 20px;
+  /* width:100%; */
   max-width: 1000px;
+  height: 100%;   
+  margin: 0 auto; 
+  padding: 40px 20px;
+  box-sizing: border-box;
 }
 
 .image-container {
@@ -58,13 +55,22 @@ body {
 }
 
 .text-container {
-  flex: 3;
-  text-align: left;
+  flex: 2;
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+}
+
+.title {
+  font-size: 35px;
+  font-weight: bold;
 }
 
 .input-container {
   position: relative;
   width: 100%;
+  max-width: 550px;
+  margin: 0;
 }
 
 .input-field {
