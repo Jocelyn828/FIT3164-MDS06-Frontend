@@ -1,12 +1,18 @@
 import { createRouter, createWebHistory } from "vue-router";
 import SearchPage from "@/views/SearchPage.vue";
 import ResultsPage from "@/views/ResultsPage.vue";
+import LoadingPage from "@/views/LoadingPage.vue";
 
 const routes = [
   {
     path: "/",
     name: "search",
     component: SearchPage,
+  },
+  {
+    path: "/loading",
+    name: 'loading',
+    component: LoadingPage,
   },
   {
     path: "/results",

@@ -1,15 +1,19 @@
 <script setup>
 import Image from "primevue/image";
+import { useToast } from "primevue";
 import SearchingPic from "@/assets/searchingpic.svg"; 
 import { ref } from "vue";
 import { useRouter } from "vue-router";
 
 const router = useRouter();
 const searchQuery = ref("");
+const toast = useToast();
 
 const handleSearch = () => {
+  if (!searchQuery.value.trim()) {
+  toast.add({severity: 'error', summary: 'Missing Query', detail: 'Please enter your research query!', life: 3000,}); return;} // prevent empty search
   // Navigate to the ResultsPage with the search query
-  router.push({ name: "results", query: { q: searchQuery.value } });
+  router.push({ name: "loading", query: { q: searchQuery.value } });
 };
 
 </script>
@@ -26,11 +30,13 @@ const handleSearch = () => {
       <h1 class="title">Get perfect articles in seconds.</h1>
       <div class="input-container">
         <InputText v-model="searchQuery" type="text" size="large" placeholder="Type a research topic or question..."
-          class="input-field" />
+          class="input-field" @keydown.enter="handleSearch" />
         <Button label="" icon="pi pi-search" iconPos="top" class="search-button" severity="secondary" text  @click="handleSearch" />
       </div>
     </div>
   </div>
+
+  <Toast/>
 </template>
 
 <style>
