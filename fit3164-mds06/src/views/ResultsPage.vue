@@ -4,21 +4,32 @@ import ResultsPic from "@/assets/resultspic.svg";
 import DataTable from "primevue/datatable";
 import Column from "primevue/column";
 import { ref } from "vue";
+import { useRouter } from "vue-router";
 
 const props = defineProps({
   query: String, // Accept the search query as a prop
 });
 
 const searchResults = ref([]); // Placeholder for now (no back-end yet)
+const router = useRouter();
+
+const goBack = () => {
+  router.push({ name: "search" });
+};
+
 </script>
 
 <template>
     <div class="results-wrapper">
-        <div class="container-with-floating-image">
 
-          <!-- Floating image aligned top-left of grey box--> 
-           <img :src="ResultsPic" alt="Results Image" class="floating-image" />
-            
+      <div class="back-link" @click="goBack">
+        <i class="pi pi-chevron-left"></i> Back to Search 
+      </div>
+
+      <div class="container-with-floating-image">
+        <!-- Floating image aligned top-left of grey box--> 
+          <img :src="ResultsPic" alt="Results Image" class="floating-image" />
+          
         <!-- Grey Box Content -->
         <div class="results-container">
             <!-- Query Section-->
@@ -47,10 +58,31 @@ const searchResults = ref([]); // Placeholder for now (no back-end yet)
 <style>
 .results-wrapper {
   display: flex;
-  justify-content: center;
+  flex-direction: column;
+  align-items: center;
   width: 100%; 
-  padding: 40px 20px; 
+  padding: 30px 20px; 
   box-sizing: border-box;
+}
+
+.back-link {
+  align-self: flex-start;
+  font-size: 16px;
+  cursor: pointer;
+  color: #000;
+  font-weight: 500;
+  margin-bottom: 40px;
+  display: flex;
+  align-items: center;
+  gap: 5px;
+  margin-left: 220px;
+  transition: color 0.3s ease, font-weight 0.3s ease;
+}
+
+.back-link:hover {
+  color: #6c2bd9;
+  font-weight: 600;
+  text-decoration: none;
 }
 
 .container-with-floating-image {
