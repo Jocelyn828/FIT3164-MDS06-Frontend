@@ -25,12 +25,11 @@ html, body {
 .app-layout {
   display: flex;
   flex-direction: column;
-  height: 100vh;
-  overflow: hidden; /* prevent whole-page scroll */
+  min-height: 100vh;
 }
 
 .content-container {
   flex: 1;
-  overflow-y: auto;  /* only scroll main content */
+  padding-top: 70px;
 }
 </style>

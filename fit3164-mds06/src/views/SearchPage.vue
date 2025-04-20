@@ -50,7 +50,7 @@ const handleSearch = () => {
   max-width: 1000px;
   height: 100%;   
   margin: 0 auto; 
-  padding: 40px 20px;
+  padding: 150px 20px;
   box-sizing: border-box;
 }
 

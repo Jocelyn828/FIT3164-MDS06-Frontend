@@ -25,7 +25,6 @@ onMounted(() => {
         <h1>Gathering the best research articles just for you...</h1>
       </div>
       
-
       <div class="loading-image">
         <Image :src="LoadingPic" width="250"/>
       </div>
