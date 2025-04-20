@@ -13,7 +13,7 @@ onMounted(() => {
   setTimeout(() => {
     const query = route.query.q
     router.replace({ name: 'results', query: { q: query } })
-  }, 3000) // 3 seconds loading screen
+  }, 5000) // 5 seconds loading screen
 })
 
 </script>
@@ -67,5 +67,22 @@ onMounted(() => {
   line-height: 1.4;
   color: #000;
   margin: 0;
+  white-space: nowrap;
+  overflow: hidden;
+  border-right: 3px solid #000;
+  width: 0;
+  animation: typing 5s steps(50, end) infinite, blink 0.75s step-end infinite;
 }
+
+@keyframes typing {
+  0% { width: 0 }
+  50% { width: 100% }
+  100% { width: 0 }
+}
+
+@keyframes blink {
+  from, to { border-color: transparent }
+  50% { border-color: black }
+}
+
 </style>
