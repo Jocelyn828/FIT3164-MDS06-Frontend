@@ -31,7 +31,7 @@ const getStarted = () => {
   display: flex;
   justify-content: center;
   align-items: center;
-  padding: 30px 20px;
+  padding: 20px 20px;
   box-sizing: border-box;
 }
 
@@ -51,12 +51,11 @@ const getStarted = () => {
   justify-content: center; 
   max-width: 100%;
   height: auto;
-  padding-top: 30px;
-  padding-bottom: 20px;
+  padding-top: 30px
 }
 
 .main-text h1 {
-  font-size: 50px;
+  font-size: 45px;
   font-weight: bold;
   line-height: 1;
   color: #000;
@@ -67,7 +66,7 @@ const getStarted = () => {
 }
 
 .main-text h2 {
-  font-size: 18px;
+  font-size: 16px;
   font-weight: lighter;
   line-height: 1.4;
   color: #000;
@@ -80,8 +79,8 @@ const getStarted = () => {
 .start-button {
   background-color: black; 
   color: white; 
-  font-size: 15px;           
-  top: 20px;
+  font-size: 14px;           
+  top: 5px;
   bottom: 30px;
   padding: 10px;
   display: flex;
