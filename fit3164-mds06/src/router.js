@@ -2,7 +2,6 @@ import { createRouter, createWebHistory } from "vue-router";
 import MainPage from "@/views/MainPage.vue";
 import SearchPage from "@/views/SearchPage.vue";
 import ResultsPage from "@/views/ResultsPage.vue";
-import LoadingPage from "@/views/LoadingPage.vue";
 
 const routes = [
   {
@@ -14,11 +13,6 @@ const routes = [
     path: "/search",
     name: "search",
     component: SearchPage,
-  },
-  {
-    path: "/loading",
-    name: 'loading',
-    component: LoadingPage,
   },
   {
     path: "/results",
