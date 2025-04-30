@@ -12,8 +12,8 @@ const toast = useToast();
 const handleSearch = () => {
   if (!searchQuery.value.trim()) {
   toast.add({severity: 'error', summary: 'Missing Query', detail: 'Please enter your research query!', life: 3000,}); return;} // prevent empty search
-  // Navigate to the ResultsPage with the search query
-  router.push({ name: "loading", query: { q: searchQuery.value } });
+  // Navigate to the KeywordPage with the search query
+  router.push({ name: "keyword", query: { q: searchQuery.value } });
 };
 
 </script>
