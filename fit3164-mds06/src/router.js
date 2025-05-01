@@ -1,6 +1,7 @@
 import { createRouter, createWebHistory } from "vue-router";
 import MainPage from "@/views/MainPage.vue";
 import SearchPage from "@/views/SearchPage.vue";
+import KeywordPage from "@/views/KeywordPage.vue";
 import ResultsPage from "@/views/ResultsPage.vue";
 
 const routes = [
@@ -13,6 +14,11 @@ const routes = [
     path: "/search",
     name: "search",
     component: SearchPage,
+  },
+  {
+    path: "/keyword",
+    name: "keyword",
+    component: KeywordPage,
   },
   {
     path: "/results",

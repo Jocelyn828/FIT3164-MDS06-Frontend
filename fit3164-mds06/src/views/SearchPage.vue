@@ -21,7 +21,7 @@ const handleSearch = () => {
     });
     return;
   }
-  router.push({ name: "results", query: { q: searchQuery.value } });
+  router.push({ name: "keyword", query: { q: searchQuery.value } });
 };
 
 // Using the keyword service
