@@ -97,7 +97,7 @@ const buildBooleanQuery = () => {
   return `(${originalQuery.value}) AND (${keywordPart})`;
 };
 
-// Continue to exclusion page with the enhanced query
+// Continue to results page with the enhanced query
 const continueSearch = () => {
   // Build the enhanced query using the selected keywords
   const enhancedQuery = buildBooleanQuery();
@@ -112,9 +112,9 @@ const continueSearch = () => {
     });
   }
   
-  // Navigate to exclusion page instead of results
+  // Navigate to results page
   router.push({ 
-    name: 'exclusion', 
+    name: 'results', 
     query: { 
       q: enhancedQuery,  // This is the boolean query with operators
       originalQuery: originalQuery.value,
