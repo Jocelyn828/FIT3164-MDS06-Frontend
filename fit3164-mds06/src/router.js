@@ -2,6 +2,7 @@ import { createRouter, createWebHistory } from "vue-router";
 import MainPage from "@/views/MainPage.vue";
 import SearchPage from "@/views/SearchPage.vue";
 import KeywordPage from "@/views/KeywordPage.vue";
+import ExclusionPage from "@/views/ExclusionPage.vue";
 import ResultsPage from "@/views/ResultsPage.vue";
 
 const routes = [
@@ -19,6 +20,11 @@ const routes = [
     path: "/keyword",
     name: "keyword",
     component: KeywordPage,
+  },
+  {
+    path: "/exclusion",
+    name: "exclusion",
+    component: ExclusionPage,
   },
   {
     path: "/results",

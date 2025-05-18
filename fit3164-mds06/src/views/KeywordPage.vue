@@ -114,7 +114,7 @@ const continueSearch = () => {
   
   // Navigate to results page
   router.push({ 
-    name: 'results', 
+    name: 'exclusion', 
     query: { 
       q: enhancedQuery,  // This is the boolean query with operators
       originalQuery: originalQuery.value,
