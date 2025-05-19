@@ -237,11 +237,13 @@ const goBack = () => {
   cursor: pointer;
   color: #495057;
   font-weight: 500;
+  font-family: inherit;
   transition: all 0.2s ease;
 }
 
 .back-button:hover {
   background-color: #f8f9fa;
+  transform: translateX(-3px);
   color: #9D34DA;
 }
 

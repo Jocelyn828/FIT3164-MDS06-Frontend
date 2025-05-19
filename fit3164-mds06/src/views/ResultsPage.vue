@@ -10,7 +10,8 @@ import api from "@/services/queryRefinement";
 const route = useRoute();
 const router = useRouter();
 
-const query = ref(route.query.q || "");
+const originalQuery = ref(route.query.originalQuery || route.query.q || "");
+const processedQuery = ref(route.query.q || "");
 const searchResults = ref([]);
 const refinedQuery = ref("");
 const keyConceptsText = ref("");
@@ -18,7 +19,7 @@ const loading = ref(true);
 const error = ref(null);
 
 onMounted(async () => {
-  if (!query.value) {
+  if (!processedQuery.value) {
     router.push({ name: "search" });
     return;
   }
@@ -26,7 +27,7 @@ onMounted(async () => {
   try {
     loading.value = true;
     
-    const data = await api.searchArticles(query.value);
+    const data = await api.searchArticles(processedQuery.value);
     
     refinedQuery.value = data.refined_query;
     keyConceptsText.value = data.key_concepts.join(", ");
@@ -79,7 +80,7 @@ const goBack = () => {
         <div v-else class="results-content">
           <div class="query-section">
             <h2 class="query-title">Your Query:</h2>
-            <p class="query-text">{{ query }}</p>
+            <p class="query-text">{{ originalQuery }}</p>
             
             <h2 class="query-title">Refined Query:</h2>
             <p class="query-text">{{ refinedQuery }}</p>
@@ -140,12 +141,15 @@ const goBack = () => {
   align-items: center;
   gap: 8px;
   margin-left: 110px;
-  transition: all 0.3s ease;
+  transition: all 0.2s ease;
+  padding: 10px 16px;
+  border-radius: 8px;
 }
 
 .back-link:hover {
   color: #9D34DA;
   transform: translateX(-3px);
+  background-color: #f0f2f4;
 }
 
 .container-with-floating-image {
@@ -156,8 +160,8 @@ const goBack = () => {
 
 .floating-image {
   position: absolute;
-  top: -80px;  
-  left: -40px;    
+  top: -70px;
+  right: 5px;
   z-index: 2;
   width: 180px;
   height: auto;
@@ -277,7 +281,7 @@ const goBack = () => {
   .floating-image {
     width: 140px;
     top: -60px;
-    left: -20px;
+    right: -20px;
   }
   
   .results-container {
@@ -294,8 +298,8 @@ const goBack = () => {
   .floating-image {
     width: 100px;
     top: -40px;
-    left: 50%;
-    transform: translateX(-50%);
+    right: 50%;
+    transform: translateX(240%);
   }
   
   .results-container {

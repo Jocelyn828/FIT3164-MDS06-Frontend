@@ -124,10 +124,11 @@ const uploadAndAnalyzeDocument = async () => {
   try {
     // Simulate upload progress
     const progressInterval = setInterval(() => {
-      uploadProgress.value += 10;
       if (uploadProgress.value >= 100) {
         clearInterval(progressInterval);
+        return;
       }
+      uploadProgress.value = Math.min(uploadProgress.value + 10, 100);
     }, 300);
     
     // Call your API with both document and exclusion criterion
@@ -372,8 +373,8 @@ const goBack = () => {
         
         <!-- Upload Progress -->
         <div v-if="isUploading || isAnalyzing" class="upload-progress">
-          <ProgressBar :value="uploadProgress" :style="{ height: '10px' }" />
-          <p v-if="isUploading">Uploading document: {{ uploadProgress }}%</p>
+          <ProgressBar :value="Math.min(uploadProgress, 100)" :style="{ height: '10px' }" />
+          <p v-if="isUploading">Uploading document: {{ Math.min(uploadProgress, 100) }}%</p>
           <p v-if="isAnalyzing">Analyzing document with criterion: "{{ newPatternInput }}"</p>
         </div>
         
@@ -567,11 +568,13 @@ const goBack = () => {
   cursor: pointer;
   color: #495057;
   font-weight: 500;
+  font-family: 'inherit';
   transition: all 0.2s ease;
 }
 
 .back-button:hover {
   background-color: #f8f9fa;
+  transform: translateX(-3px);
   color: #9D34DA;
 }
 
@@ -627,6 +630,7 @@ const goBack = () => {
 .query-text {
   color: #495057;
   font-weight: 500;
+  margin: 0;
 }
 
 .keywords-label {
@@ -634,7 +638,6 @@ const goBack = () => {
   align-items: center;
   flex-wrap: wrap;
   gap: 4px;
-  margin-left: 8px;
   color: #6c757d;
 }
 
