@@ -24,7 +24,8 @@ const documentAnalysisResult = ref(null);
 const selectedExclusionPatterns = ref([]);
 const suggestedPatterns = ref([]);
 const customPatterns = ref([]);
-const newPatternInput = ref("");
+const documentAnalysisInput = ref("");
+const customPatternInput = ref("");
 
 // Loading states
 const isLoading = ref(false);
@@ -107,7 +108,7 @@ const uploadAndAnalyzeDocument = async () => {
     return;
   }
   
-  if (!newPatternInput.value.trim()) {
+  if (!documentAnalysisInput.value.trim()) {
     toast.add({
       severity: 'warn',
       summary: 'No Exclusion Criterion',
@@ -134,7 +135,7 @@ const uploadAndAnalyzeDocument = async () => {
     // Call your API with both document and exclusion criterion
     const analysisResponse = await exclusionService.analyzeDocument(
       documentFile.value,
-      newPatternInput.value.trim()
+      documentAnalysisInput.value.trim()
     );
     
     // Clear progress interval
@@ -152,7 +153,7 @@ const uploadAndAnalyzeDocument = async () => {
       // Create a pattern from the analysis result
       const newPattern = {
         id: `doc-pattern-${Date.now()}-${Math.random().toString(36).substr(2, 9)}`,
-        name: analysisResponse.result.classification || newPatternInput.value.trim(),
+        name: analysisResponse.result.classification || documentAnalysisInput.value.trim(),
         keywords: analysisResponse.result.keywords || [],
         evidence: analysisResponse.result.reason || "No reason provided",
         type: 'document'
@@ -165,7 +166,7 @@ const uploadAndAnalyzeDocument = async () => {
       selectedExclusionPatterns.value.push(newPattern);
       
       // Clear the input after successful analysis
-      newPatternInput.value = "";
+      documentAnalysisInput.value = "";
       
       toast.add({
         severity: 'success',
@@ -207,13 +208,13 @@ const togglePattern = (pattern) => {
 
 // Add custom pattern without document analysis
 const addCustomPattern = () => {
-  if (!newPatternInput.value.trim()) {
+  if (!customPatternInput.value.trim()) {
     return;
   }
   
   const newPattern = {
     id: `custom-${Date.now()}-${Math.random().toString(36).substr(2, 9)}`,
-    name: newPatternInput.value.trim(),
+    name: customPatternInput.value.trim(),
     keywords: [],
     evidence: 'User-defined exclusion pattern',
     type: 'custom'
@@ -221,7 +222,7 @@ const addCustomPattern = () => {
   
   customPatterns.value.push(newPattern);
   selectedExclusionPatterns.value.push(newPattern);
-  newPatternInput.value = "";
+  customPatternInput.value = "";
 };
 
 // Remove custom pattern
@@ -315,10 +316,12 @@ const goBack = () => {
     
     <div class="exclusion-container">
       <div class="exclusion-text">
-        <h1>Define Exclusion Criteria</h1>
-        <h2>Input patterns to exclude irrelevant documents from your search results.</h2>
+        <h1>Define Exclusion Pattern</h1>
+        <h2>Specify criteria to exclude irrelevant documents from your search results.
+You may use either or both of the methods below in any order.
+        </h2>
         <p class="query-info">
-          <span class="query-label">Query:</span> 
+          <span class="query-label">Original Query:</span> 
           <span class="query-text">{{ originalQuery }}</span>
           <span v-if="selectedKeywords.length > 0" class="keywords-label">
             with keywords: <span class="keyword-pill" v-for="keyword in selectedKeywords" :key="keyword">{{ keyword }}</span>
@@ -330,17 +333,17 @@ const goBack = () => {
       <div class="upload-section">
         <h3>
           <i class="pi pi-file-import"></i>
-          Document Exclusion Analysis
+          Document-Based Exclusion Analysis
         </h3>
         <p class="upload-description">
-          Enter an exclusion criterion and upload a document to analyze
+          Provide an exclusion criterion and upload a representative document that reflects it.
         </p>
         
         <!-- Exclusion Criterion Input -->
         <div class="criterion-input" style="margin-bottom: 16px;">
           <InputText 
-            v-model="newPatternInput" 
-            placeholder="Enter exclusion criterion (e.g., Non-English, Wrong Population, etc.)" 
+            v-model="documentAnalysisInput" 
+            placeholder="“Non-English”, “Wrong Population”, etc." 
             style="width: 100%;"
           />
         </div>
@@ -366,7 +369,7 @@ const goBack = () => {
             icon="pi pi-sync" 
             label="Analyze Document" 
             :loading="isUploading || isAnalyzing" 
-            :disabled="!documentFile || !newPatternInput.trim()"
+            :disabled="!documentFile || !documentAnalysisInput.trim()"
             @click="uploadAndAnalyzeDocument" 
           />
         </div>
@@ -375,7 +378,7 @@ const goBack = () => {
         <div v-if="isUploading || isAnalyzing" class="upload-progress">
           <ProgressBar :value="Math.min(uploadProgress, 100)" :style="{ height: '10px' }" />
           <p v-if="isUploading">Uploading document: {{ Math.min(uploadProgress, 100) }}%</p>
-          <p v-if="isAnalyzing">Analyzing document with criterion: "{{ newPatternInput }}"</p>
+          <p v-if="isAnalyzing">Analyzing document with criterion: "{{ documentAnalysisInput }}"</p>
         </div>
         
         <!-- Success Message -->
@@ -388,7 +391,7 @@ const goBack = () => {
       <!-- Analysis Results Display -->
       <div v-if="documentAnalysisResult" class="analysis-results">
         <h3>
-          <i class="pi pi-list"></i>
+          <i class="pi pi-info-circle"></i>
           Analysis Results
         </h3>
         <div class="result-card">
@@ -414,30 +417,39 @@ const goBack = () => {
         </div>
       </div>
       
-      <!-- Patterns Section -->
-      <div class="patterns-section">
+      <!-- Custom Patterns Section -->
+      <div class="custom-pattern-section">
         <h3>
           <i class="pi pi-filter"></i>
-          Exclusion Patterns
+          Custom Exclusion Patterns
         </h3>
         
         <!-- Add Pattern Manually -->
         <div class="custom-pattern-input">
+          <p class="upload-description">
+            If no document is available, you may define exclusion patterns manually.
+          </p>
           <div class="input-group">
             <InputText 
-              v-model="newPatternInput" 
+              v-model="customPatternInput" 
               placeholder="Add a custom exclusion pattern..." 
               @keyup.enter="addCustomPattern"
             />
             <Button 
               icon="pi pi-plus" 
               @click="addCustomPattern" 
-              :disabled="!newPatternInput.trim()"
+              :disabled="!customPatternInput.trim()"
             />
           </div>
-          <p class="input-hint">You can also add patterns manually without document analysis</p>
+        </div>
         </div>
         
+      <!-- Patterns Section -->
+      <div v-if="customPatterns.length > 0 || suggestedPatterns.length > 0" class="patterns-section">
+        <h3>
+          <i class="pi pi-list"></i>
+          Selected Exclusion Patterns
+        </h3>
         <!-- Custom Patterns -->
         <div v-if="customPatterns.length > 0" class="pattern-group">
           <h4>Your Custom Patterns</h4>
@@ -638,7 +650,8 @@ const goBack = () => {
   align-items: center;
   flex-wrap: wrap;
   gap: 4px;
-  color: #6c757d;
+  font-weight: 600;
+  color: #212529;
 }
 
 .keyword-pill {
@@ -829,9 +842,31 @@ const goBack = () => {
   font-size: 12px;
 }
 
+/* Custom Patterns Section Styles */
+.custom-pattern-section {
+  margin-bottom: 24px;
+  width: 100%;
+  max-width: 1000px;
+  background-color: #f8f9fa;
+  border-radius: 12px;
+  box-shadow: 0 4px 20px rgba(0, 0, 0, 0.06);
+  padding: 24px;
+}
+
+.custom-pattern-section h3 i {
+  color: #9D34DA;
+}
+
 /* Patterns Section Styles */
 .patterns-section {
-  margin-bottom: 32px;
+  margin-bottom: 24px;
+  width: 100%;
+  max-width: 1000px;
+  background-color: #f8f9fa;
+  border-radius: 12px;
+  box-shadow: 0 4px 20px rgba(0, 0, 0, 0.06);
+  padding: 24px;
+  border-left: 4px solid #9D34DA;
 }
 
 .patterns-section h3 {
@@ -862,11 +897,6 @@ const goBack = () => {
   padding: 10px 16px;
 }
 
-.input-hint {
-  margin-top: 8px;
-  font-size: 12px;
-  color: #6c757d;
-}
 
 .pattern-group {
   margin-bottom: 24px;
@@ -908,6 +938,10 @@ const goBack = () => {
 
 .pattern-card.document-pattern {
   border-left: 4px solid #2dce89;
+}
+
+.pattern-card.custom-pattern {
+  border-left: 4px solid #fd7e14;
 }
 
 .pattern-header {
@@ -973,7 +1007,7 @@ const goBack = () => {
 }
 
 .custom-pattern {
-  background-color: #fff6e9;
+  background-color: white;
   border-left: 4px solid #fd7e14;
 }
 
