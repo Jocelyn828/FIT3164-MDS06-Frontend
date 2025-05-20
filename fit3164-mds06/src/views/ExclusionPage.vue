@@ -101,8 +101,8 @@ const uploadAndAnalyzeDocument = async () => {
   if (!documentFile.value) {
     toast.add({
       severity: 'warn',
-      summary: 'No Document',
-      detail: 'Please select a document to upload',
+      summary: 'Document Required',
+      detail: 'Please select a document to upload.',
       life: 3000
     });
     return;
@@ -111,8 +111,8 @@ const uploadAndAnalyzeDocument = async () => {
   if (!documentAnalysisInput.value.trim()) {
     toast.add({
       severity: 'warn',
-      summary: 'No Exclusion Criterion',
-      detail: 'Please enter an exclusion criterion to analyze',
+      summary: 'Criterion Required',
+      detail: 'Please enter an exclusion criterion to analyze.',
       life: 3000
     });
     return;
@@ -178,7 +178,7 @@ const uploadAndAnalyzeDocument = async () => {
       toast.add({
         severity: 'error',
         summary: 'Analysis Failed',
-        detail: analysisResponse.message || 'Failed to analyze document',
+        detail: 'Unable to analyze the document. Please try again.',
         life: 3000
       });
     }
@@ -186,8 +186,8 @@ const uploadAndAnalyzeDocument = async () => {
     console.error("Error analyzing document:", error);
     toast.add({
       severity: 'error',
-      summary: 'Error',
-      detail: 'Failed to analyze document',
+      summary: 'Analyzing Failed',
+      detail: 'An error occurred while analyzing your document. Please try again.',
       life: 3000
     });
   } finally {
@@ -245,8 +245,8 @@ const continueToResults = () => {
   if (selectedExclusionPatterns.value.length > 0) {
     toast.add({
       severity: 'success',
-      summary: 'Exclusion Criteria Added',
-      detail: `Added ${selectedExclusionPatterns.value.length} exclusion patterns to your search`,
+      summary: 'Exclusions Applied',
+      detail: `Added ${selectedExclusionPatterns.value.length} exclusion ${selectedExclusionPatterns.value.length === 1 ? 'pattern' : 'patterns'} to your search.`,
       life: 3000
     });
   }

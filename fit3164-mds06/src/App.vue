@@ -12,6 +12,7 @@ import Footer from './components/Footer.vue'
     </main>
     <Footer />
   </div>
+  <Toast />
 </template>
 
 <style>

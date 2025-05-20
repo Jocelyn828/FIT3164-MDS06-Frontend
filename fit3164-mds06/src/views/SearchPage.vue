@@ -1,6 +1,6 @@
 <script setup>
 import Image from "primevue/image";
-import { useToast } from "primevue";
+import { useToast } from "primevue/usetoast";
 import SearchingPic from "@/assets/searchingpic.svg";
 import { ref } from "vue";
 import { useRouter } from "vue-router";
@@ -15,8 +15,8 @@ const handleSearch = () => {
   if (!searchQuery.value.trim()) {
     toast.add({
       severity: 'error', 
-      summary: 'Missing Query', 
-      detail: 'Please enter your research topic or question', 
+      summary: 'Search Query Required', 
+      detail: 'Please enter your research topic.', 
       life: 3000
     });
     return;
@@ -39,7 +39,7 @@ const handleKeywordClick = async (keyword) => {
       toast.add({
         severity: 'info',
         summary: 'Keyword Expanded',
-        detail: 'Search query has been formulated from your selection',
+        detail: 'Search query has been formulated from your selection.',
         life: 3000
       });
     } else {
@@ -48,8 +48,8 @@ const handleKeywordClick = async (keyword) => {
       
       toast.add({
         severity: 'warn',
-        summary: 'Using Original Keyword',
-        detail: data.error || 'Could not expand the keyword. Using it as-is.',
+        summary: 'Using Original Term',
+        detail: 'Unable to expand the keyword. Using your original term.',
         life: 3000
       });
     }
@@ -62,7 +62,7 @@ const handleKeywordClick = async (keyword) => {
     toast.add({
       severity: 'error',
       summary: 'Expansion Failed',
-      detail: 'Could not connect to the expansion service.',
+      detail: 'Could not connect to the expansion service. Please try again.',
       life: 3000
     });
   } finally {
@@ -135,7 +135,6 @@ const handleKeywordClick = async (keyword) => {
       </div>
     </div>
   </div>
-  <Toast />
 </template>
 
 <style scoped>

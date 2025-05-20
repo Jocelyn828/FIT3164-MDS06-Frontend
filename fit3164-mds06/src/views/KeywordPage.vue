@@ -57,8 +57,8 @@ onMounted(async () => {
     console.error("Error fetching keyword suggestions:", error);
     toast.add({
       severity: 'error',
-      summary: 'Error',
-      detail: 'Failed to load keyword suggestions',
+      summary: 'Suggestion Failed',
+      detail: 'Failed to load keyword suggestions. Using general terms instead.',
       life: 3000
     });
     
@@ -106,8 +106,8 @@ const continueSearch = () => {
   if (selectedKeywords.value.length > 0) {
     toast.add({
       severity: 'success',
-      summary: 'Search Enhanced',
-      detail: `Added ${selectedKeywords.value.length} keywords to your search`,
+      summary: 'Keywords Selected',
+      detail: `Added ${selectedKeywords.value.length} ${selectedKeywords.value.length === 1 ? 'keyword' : 'keywords'} to your search.`,
       life: 3000
     });
   }
