@@ -6,9 +6,11 @@ import Column from "primevue/column";
 import { ref, onMounted } from "vue";
 import { useRouter, useRoute } from "vue-router";
 import api from "@/services/queryRefinement";
+import { useToast } from "primevue/usetoast";
 
 const route = useRoute();
 const router = useRouter();
+const toast = useToast();
 
 const originalQuery = ref(route.query.originalQuery || route.query.q || "");
 const processedQuery = ref(route.query.q || "");
@@ -17,6 +19,7 @@ const refinedQuery = ref("");
 const keyConceptsText = ref("");
 const loading = ref(true);
 const error = ref(null);
+const selectedDocuments = ref([]);
 
 onMounted(async () => {
   if (!processedQuery.value) {
@@ -51,6 +54,69 @@ onMounted(async () => {
     loading.value = false;
   }
 });
+
+const refineSearch = async () => {
+  if (selectedDocuments.value.length === 0) {
+    toast.add({
+      severity: 'warn',
+      summary: 'No Documents Selected',
+      detail: 'Please select at least one document to exclude.',
+      life: 3000
+    });
+    return;
+  }
+
+  try {
+    loading.value = true;
+    
+    // Create exclusion terms from selected documents
+    const exclusionTerms = selectedDocuments.value
+      .map(doc => `title: "${doc.title}"`)
+      .join(' ');
+    
+    // Add exclusion terms to the query
+    const newQuery = `${processedQuery.value} AND NOT (${exclusionTerms})`;
+    
+    // Perform new search with refined query
+    const data = await api.searchArticles(newQuery);
+    
+    refinedQuery.value = data.refined_query;
+    keyConceptsText.value = data.key_concepts.join(", ");
+    
+    searchResults.value = data.articles.map(article => ({
+      title: article.title,
+      author: "N/A", 
+      year: "N/A", 
+      source: article.source,
+      num_citations: "N/A", 
+      keywords: article.theme || "N/A",
+      citation: article.url || "N/A", 
+      abstract: article.abstract_preview,
+      similarity_score: article.similarity_score.toFixed(2)
+    }));
+    
+    toast.add({
+      severity: 'success',
+      summary: 'Search Refined',
+      detail: `Excluded ${selectedDocuments.value.length} documents from search results.`,
+      life: 3000
+    });
+
+    // Clear selection after refinement
+    selectedDocuments.value = [];
+    
+  } catch (err) {
+    console.error('Error refining search:', err);
+    toast.add({
+      severity: 'error',
+      summary: 'Refinement Failed',
+      detail: 'Failed to refine search results. Please try again.',
+      life: 3000
+    });
+  } finally {
+    loading.value = false;
+  }
+};
 
 const goBack = () => {
   router.push({ name: "search" });
@@ -89,14 +155,34 @@ const goBack = () => {
             <p class="query-text">{{ keyConceptsText }}</p>
           </div>
           
+          <div class="refine-container" v-if="searchResults.length > 0">
+            <div class="refine-instructions">
+              <i class="pi pi-info-circle"></i>
+              <p>Select documents to exclude in order to refine your search results.</p>
+            </div>
+            <Button 
+              @click="refineSearch" 
+              :disabled="selectedDocuments.length === 0 || loading"
+              :loading="loading"
+              class="refine-button"
+            >
+              <i class="pi pi-filter"></i>
+              Refine Search ({{ selectedDocuments.length }} selected)
+            </Button>
+          </div>
+          
           <DataTable 
             :value="searchResults" 
+            v-model:selection="selectedDocuments"
             class="results-table" 
             :paginator="searchResults.length > 10" 
             :rows="10"
             stripedRows
             tableStyle="min-width: 50rem"
+            dataKey="title"
+            :loading="loading"
           >
+            <Column selectionMode="multiple" headerStyle="width: 3rem"></Column>
             <Column field="title" header="Title"></Column>
             <Column field="source" header="Source"></Column>
             <Column field="keywords" header="Keywords"></Column>
@@ -273,6 +359,56 @@ const goBack = () => {
   color: #6c757d;
 }
 
+.refine-container {
+  margin-top: 40px;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  gap: 20px;
+  flex-wrap: wrap;
+}
+
+.refine-instructions {
+  display: flex;
+  gap: 12px;
+  padding: 16px;
+  background-color: #f8f9fa;
+  border-radius: 8px;
+  flex: 1;
+  min-width: 300px;
+}
+
+.refine-instructions i {
+  color: #9D34DA;
+  font-size: 1.2rem;
+  margin-top: 2px;
+}
+
+.refine-instructions p {
+  margin: 0;
+  color: #495057;
+  line-height: 1.5;
+}
+
+.refine-button {
+  white-space: nowrap;
+  background-color: #9D34DA;
+  border-color: #9D34DA;
+  color: white;
+  font-weight: 600;
+  padding: 16px;
+}
+
+.refine-button:hover:not(:disabled) {
+  background-color: #7209b7;
+  border-color: #7209b7;
+}
+
+.refine-button:disabled {
+  opacity: 0.7;
+  cursor: not-allowed;
+}
+
 @media (max-width: 992px) {
   .back-link {
     margin-left: 10px;
@@ -287,6 +423,19 @@ const goBack = () => {
   .results-container {
     padding: 30px;
     margin-top: 40px;
+  }
+
+  .refine-container {
+    flex-direction: column;
+    align-items: stretch;
+  }
+
+  .refine-instructions {
+    min-width: unset;
+  }
+
+  .refine-button {
+    width: 100%;
   }
 }
 
@@ -313,6 +462,15 @@ const goBack = () => {
   
   .query-text {
     font-size: 14px;
+  }
+
+  .refine-container {
+    margin-top: 20px;
+    gap: 12px;
+  }
+
+  .refine-instructions {
+    padding: 12px;
   }
 }
 </style>

@@ -37,7 +37,7 @@ const handleKeywordClick = async (keyword) => {
       searchQuery.value = data.expandedQuery;
       
       toast.add({
-        severity: 'info',
+        severity: 'success',
         summary: 'Keyword Expanded',
         detail: 'Search query has been formulated from your selection.',
         life: 3000
