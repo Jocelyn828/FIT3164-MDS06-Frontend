@@ -21,6 +21,19 @@ const handleSearch = () => {
     });
     return;
   }
+
+  // Check if query length exceeds 500 words
+  const wordCount = searchQuery.value.trim().split(/\s+/).length;
+  if (wordCount > 500) {
+    toast.add({
+      severity: 'error',
+      summary: 'Query Too Long',
+      detail: 'Your search query exceeds 500 words. Please make it more concise.',
+      life: 3000
+    });
+    return;
+  }
+
   router.push({ name: "keyword", query: { q: searchQuery.value } });
 };
 
